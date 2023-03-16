@@ -1,6 +1,6 @@
 # python3
 
-def swaping(data, i, res):
+def swapping(data, i, res):
     left_child = 1 + (2*i)
     right_child = 2 + (2*i)
     n = len(data)
@@ -14,14 +14,14 @@ def swaping(data, i, res):
     if data[i] > data[x]:
         res.append((i, x))
         data[i], data[x] = data[x], data[i]
-        swaping(data, x, res)
+        swapping(data, x, res)
         
         
 def build_heap(data):
     swaps = []
     n = len(data)
     for i in range(int((n-2)/2), -1, -1):
-        swaping(data, i, swaps)
+        swapping(data, i, swaps)
         
     return swaps
         
@@ -33,17 +33,14 @@ def parallel_processing(n, m, data):
     processing_threads = list(range(n))
     start_times = [0] * n
     
-    if data_idx < m:
+    if data_idx <= m:
         for i in processing_threads:
-            start_times[i] = data[data_idx]
-            output.append((i, start_times[i]))
-            heap[i] = start_times[i] + data[data_idx]
-            data_idx += 1
+            if data_idx < m:
+                start_times[i] = data[data_idx]
+                output.append((i, start_times[i]))
+                heap[i] = start_times[i] + data[data_idx]
+                data_idx += 1
             
-            if data_idx == m:
-                break
-                
-                
         swaps = build_heap(heap)
         for i, j in swaps:
             processing_threads[i], processing_threads[j] = processing_threads[j], processing_threads[i]
@@ -56,10 +53,6 @@ def parallel_processing(n, m, data):
                 data_idx += 1
             else:
                 output.append((processing_threads[i], start_times[i]))
-    
-    else:
-        for i in range(n):
-            output.append((i, 0))
     
     return output
 
@@ -79,7 +72,7 @@ def main():
         source2 = input()
         if "a" in source2:
             return()
-        with open ("tests/"+source2, encoding="utf-8") as fails:
+        with open ("tests/"+ source2, encoding="utf-8") as fails:
             n = int (fails.readline())
             data = list(map(int, fails.readline().split()))
     else:
