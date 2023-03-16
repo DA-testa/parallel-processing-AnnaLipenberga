@@ -1,6 +1,21 @@
 # python3
 
-import heapq
+def swaping(data, i, res):
+    left_child = 1 + (2*i)
+    right_child = 2 + (2*i)
+    n = len(data)
+    
+    if left_child >+ n:
+        return
+    x = left_child
+    if right_child < n and data[left_child] > data[right_child]:
+        x = right_child
+        
+    if data[i] > data[x]:
+        res.append([i, x])
+        data[i], data[x] = data[x], data[i]
+        swaping(data, x, res)
+        
 
 def parallel_processing(n, m, data):
     output = []
