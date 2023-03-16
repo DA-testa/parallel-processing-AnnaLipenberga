@@ -28,6 +28,38 @@ def build_heap(data):
 
 def parallel_processing(n, m, data):
     output = []
+    heap = data[:n]
+    data_idx = n
+    processing_threads = list(range(n))
+    
+    
+    if data_idx < m:
+        for i in processing_threads:
+            output.append((i, 0))
+            heap[i] = data[data_idx]
+            data_idx += 1
+            
+            if data_idx == m:
+                break
+                
+                
+        swaps = build_heap(heap)
+        for i, j in swaps:
+            processing_threads[i], processing_threads[j] = processing_threads[j], processing_threads[i]
+            
+        for i in range(n):
+            if data_idx < m:
+                output.append((processing_threads[i], heap[i]))
+                heap[i] = data[data_idx]
+                data_idx += 1
+            else:
+                output.append((processing_threads[i], heap[i]))
+    
+    else:
+        for i in range(n):
+            output.append((i, data[i]))
+    
+    return output
     # TODO: write the function for simulating parallel tasks, 
     # create the output pairs
 
