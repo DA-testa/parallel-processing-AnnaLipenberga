@@ -5,7 +5,7 @@ def swaping(data, i, res):
     right_child = 2 + (2*i)
     n = len(data)
     
-    if left_child >+ n:
+    if left_child >= n:
         return
     x = left_child
     if right_child < n and data[left_child] > data[right_child]:
@@ -60,33 +60,35 @@ def parallel_processing(n, m, data):
             output.append((i, data[i]))
     
     return output
-    # TODO: write the function for simulating parallel tasks, 
-    # create the output pairs
 
-    return output
 
 def main():
-    # TODO: create input from keyboard
+    # create input from keyboard
     # input consists of two lines
     # first line - n and m
     # n - thread count 
     # m - job count
-    #n = 0
-    #m = 0
     n, m = map(int, input().split())
+    source = input()
+    if "I" in source:
+        n = int(input())
+        data = list(map(int, input().split()))
+    elif "F" in source:
+        source2 = input()
+        if "a" in source2:
+            return()
+        with open ("tests/"+source2, encoding="utf-8") as fails:
+            n = int (fails.readline())
+            data = list(map(int, fails.readline().split()))
+    else:
+        return()
 
-    # second line - data 
-    # data - contains m integers t(i) - the times in seconds it takes any thread to process i-th job
-    # data = []
-    data = list(map(int, input().split()))
-
-    # TODO: create the function
-    result = parallel_processing(n,m,data)
+    # pass the input data to the function
+    result = parallel_processing(n, m, data)
     
-    # TODO: print out the results, each pair in it's own line
+    # print out the results, each pair in its own line
     for pair in result:
         print(pair[0], pair[1])
-
 
 
 if __name__ == "__main__":
