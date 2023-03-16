@@ -71,17 +71,21 @@ def main():
     # first line - n and m
     # n - thread count 
     # m - job count
-    n = 0
-    m = 0
+    #n = 0
+    #m = 0
+    n, m = map(int, input().split())
 
     # second line - data 
     # data - contains m integers t(i) - the times in seconds it takes any thread to process i-th job
-    data = []
+    # data = []
+    data = list(map(int, input().split()))
 
     # TODO: create the function
     result = parallel_processing(n,m,data)
     
     # TODO: print out the results, each pair in it's own line
+    for pair in result:
+        print(pair[0], pair[1])
 
 
 
