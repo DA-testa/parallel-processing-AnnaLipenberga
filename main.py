@@ -12,7 +12,7 @@ def swaping(data, i, res):
         x = right_child
         
     if data[i] > data[x]:
-        res.append([i, x])
+        res.append((i, x))
         data[i], data[x] = data[x], data[i]
         swaping(data, x, res)
         
@@ -31,12 +31,13 @@ def parallel_processing(n, m, data):
     heap = data[:n]
     data_idx = n
     processing_threads = list(range(n))
-    
+    start_times = [0] * n
     
     if data_idx < m:
         for i in processing_threads:
-            output.append((i, 0))
-            heap[i] = data[data_idx]
+            start_times[i] = data[data_idx]
+            output.append((i, start_times[i]))
+            heap[i] = start_times[i] + data[data_idx]
             data_idx += 1
             
             if data_idx == m:
@@ -49,15 +50,16 @@ def parallel_processing(n, m, data):
             
         for i in range(n):
             if data_idx < m:
-                output.append((processing_threads[i], heap[i]))
-                heap[i] = data[data_idx]
+                start_times[i] = heap[i] - data[data_idx]
+                output.append((processing_threads[i], start_times[i]))
+                heap[i] = start_times[i] + data[data_idx]
                 data_idx += 1
             else:
-                output.append((processing_threads[i], heap[i]))
+                output.append((processing_threads[i], start_times[i]))
     
     else:
         for i in range(n):
-            output.append((i, data[i]))
+            output.append((i, 0))
     
     return output
 
@@ -82,6 +84,8 @@ def main():
             data = list(map(int, fails.readline().split()))
     else:
         return()
+
+   
 
     # pass the input data to the function
     result = parallel_processing(n, m, data)
