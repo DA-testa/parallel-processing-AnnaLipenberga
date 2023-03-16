@@ -16,6 +16,15 @@ def swaping(data, i, res):
         data[i], data[x] = data[x], data[i]
         swaping(data, x, res)
         
+        
+def build_heap(data):
+    swaps = []
+    n = len(data)
+    for i in range(int((n-2)/2), -1, -1):
+        swaping(data, i, swaps)
+        
+    return swaps
+        
 
 def parallel_processing(n, m, data):
     output = []
