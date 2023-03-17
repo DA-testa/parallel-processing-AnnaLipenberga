@@ -9,7 +9,7 @@ def parallel_processing(n, data):
         Min = min(Btimes)
         thread = Btimes.index(Min)
 
-        output.append((thread, min_busy_time))
+        output.append((thread, Min))
         Btimes[thread] += work
 
     return output
