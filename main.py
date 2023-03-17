@@ -1,7 +1,7 @@
 # python3
  
     
-  import heapq
+pip install heapq
 
 def parallel_processing(n, m, data):
     output = []
