@@ -3,7 +3,7 @@
     
 def parallel_processing(n, data):
     output = []
-    thread_busy_times = [0] * n
+    thread_busy_times = n*[0]
 
     for job_exec_time in data:
         min_busy_time = min(thread_busy_times)
