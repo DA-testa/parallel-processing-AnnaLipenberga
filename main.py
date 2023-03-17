@@ -45,14 +45,19 @@ def parallel_processing(n, m, data):
         for i, j in swaps:
             processing_threads[i], processing_threads[j] = processing_threads[j], processing_threads[i]
             
-        for i in range(n):
-            if data_idx < m:
-                start_times[i] = heap[i] - data[data_idx]
-                output.append((processing_threads[i], start_times[i]))
-                heap[i] = start_times[i] + data[data_idx]
+        while data_idx < m or heap:
+            if heap:
+                processing_time = heap[0]
+                output.append((processing_threads[0], processing_time))
+                heap[0] = processing_time + data[data_idx]
                 data_idx += 1
+                swapping(heap, 0, [])
+                for i, j in swaps:
+                    processing_threads[i], processing_threads[j] = processing_threads[j], processing_threads[i]
             else:
-                output.append((processing_threads[i], start_times[i]))
+                start_times = [heap[i] - data[data_idx] for i in range(n)]
+                output += [(processing_threads[i], start_times[i]) for i in range(n)]
+                break
     
     return output
 
