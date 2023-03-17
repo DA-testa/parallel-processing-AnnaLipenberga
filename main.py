@@ -1,23 +1,38 @@
 # python3
  
     
-    import heapq
-
-def parallel_processing(n, data):
+   def parallel_processing(n, data):
     output = []
     thread = n*[0]
     heap = [(0, i) for i in range(n)]
-    heapq.heapify(heap)
+
+    def heapify(heap):
+        for i in range(len(heap)-1, -1, -1):
+            heapify_down(heap, i)
+
+    def heapify_down(heap, i):
+        l = 2 * i + 1
+        r = 2 * i + 2
+        smallest = i
+
+        if l < len(heap) and heap[l][0] < heap[smallest][0]:
+            smallest = l
+
+        if r < len(heap) and heap[r][0] < heap[smallest][0]:
+            smallest = r
+
+        if smallest != i:
+            heap[i], heap[smallest] = heap[smallest], heap[i]
+            heapify_down(heap, smallest)
+
+    heapify(heap)
 
     for job_exec_time in data:
-        
-        _, thread = heapq.heappop(heap)
-
-        output.append((thread, thread_busy_times[thread]))
+        _, thread = heap[0]
+        output.append((thread, thread[thread]))
         thread[thread] += job_exec_time
-
-        
-        heapq.heappush(heap, (thread[thread], thread))
+        heap[0] = (thread[thread], thread)
+        heapify_down(heap, 0)
 
     return output
 
