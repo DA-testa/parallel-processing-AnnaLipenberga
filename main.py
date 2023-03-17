@@ -1,16 +1,19 @@
 # python3
  
     
-pip install heapq
-
 def parallel_processing(n, m, data):
     output = []
-    for i in range(n):
-        heapq.heappush(output, (0, i))
+    threads = list(range(n))
+    times = [0] * n
+    
     for i in range(m):
-        f, s = heapq.heappop(output)
-        output.append((f + data[i], s))
-        print(s, f)
+        # Find the thread that will be available next
+        next_thread = min(threads, key=lambda t: times[t])
+        output.append([next_thread, times[next_thread]])
+        
+        # Update the time for the chosen thread
+        times[next_thread] += data[i]
+        
     return output
 
 def main():
