@@ -1,28 +1,28 @@
 # python3
  
     
-def parallel_processing(n, m, data):
+def parallel_processing(n, data):
     output = []
-    threads = list(range(n))
-    times = [0] * n
-    
-    for i in range(m):
-        # Find the thread that will be available next
-        next_thread = min(threads, key=lambda t: times[t])
-        output.append([next_thread, times[next_thread]])
-        
-        # Update the time for the chosen thread
-        times[next_thread] += data[i]
-        
+    thread_busy_times = [0] * n
+
+    for job_exec_time in data:
+        min_busy_time = min(thread_busy_times)
+        thread = thread_busy_times.index(min_busy_time)
+
+        output.append((thread, min_busy_time))
+        thread_busy_times[thread] += job_exec_time
+
     return output
 
+
 def main():
-    # read input
     n, m = map(int, input().split())
     data = list(map(int, input().split()))
 
-    # run parallel processing
-    parallel_processing(n, m, data)
+    result = parallel_processing(n, data)
+    for thread, start_time in result:
+        print(thread, start_time)
+
 
 if __name__ == "__main__":
     main()
