@@ -3,14 +3,14 @@
     
 def parallel_processing(n, data):
     output = []
-    thread_busy_times = n*[0]
+    Btimes = n*[0]
 
-    for job_exec_time in data:
-        min_busy_time = min(thread_busy_times)
-        thread = thread_busy_times.index(min_busy_time)
+    for work in data:
+        Min = min(Btimes)
+        thread = Btimes.index(Min)
 
         output.append((thread, min_busy_time))
-        thread_busy_times[thread] += job_exec_time
+        Btimes[thread] += work
 
     return output
 
