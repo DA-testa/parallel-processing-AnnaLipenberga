@@ -1,96 +1,26 @@
 # python3
 
-def swapping(data, i, res):
-    left_child = 1 + (2*i)
-    right_child = 2 + (2*i)
-    n = len(data)
-    
-    if left_child >= n:
-        return
-    x = left_child
-    if right_child < n and data[left_child] > data[right_child]:
-        x = right_child
-        
-    if data[i] > data[x]:
-        res.append((i, x))
-        data[i], data[x] = data[x], data[i]
-        swapping(data, x, res)
-        
-        
-def build_heap(data):
-    swaps = []
-    n = len(data)
-    for i in range(int((n-2)/2), -1, -1):
-        swapping(data, i, swaps)
-        
-    return swaps
-        
-
-def parallel_processing(n, m, data):
+def parallel_processing(n, data):
     output = []
-    heap = data[:n]
-    data_idx = n
-    processing_threads = list(range(n))
-    start_times = [0] * n
-    
-    if data_idx <= m:
-        for i in processing_threads:
-            if data_idx < m:
-                start_times[i] = data[data_idx]
-                output.append((i, start_times[i]))
-                heap[i] = start_times[i] + data[data_idx]
-                data_idx += 1
-            
-        swaps = build_heap(heap)
-        for i, j in swaps:
-            processing_threads[i], processing_threads[j] = processing_threads[j], processing_threads[i]
-            
-        while data_idx < m or heap:
-            if heap:
-                processing_time = heap[0]
-                output.append((processing_threads[0], processing_time))
-                heap[0] = processing_time + data[data_idx]
-                data_idx += 1
-                swapping(heap, 0, [])
-                for i, j in swaps:
-                    processing_threads[i], processing_threads[j] = processing_threads[j], processing_threads[i]
-            else:
-                start_times = [heap[i] - data[data_idx] for i in range(n)]
-                output += [(processing_threads[i], start_times[i]) for i in range(n)]
-                break
-    
+    thread_busy_times = [0] * n
+
+    for job_exec_time in data:
+        first_to_finish = min(thread_busy_times)
+        thread = thread_busy_times.index(first_to_finish)
+
+        output.append((thread, first_to_finish))
+        thread_busy_times[thread] += job_exec_time
+
     return output
 
 
 def main():
-    # create input from keyboard
-    # input consists of two lines
-    # first line - n and m
-    # n - thread count 
-    # m - job count
-    n, m = map(int, input().split())
-    source = input()
-    if "I" in source:
-        n = int(input())
-        data = list(map(int, input().split()))
-    elif "F" in source:
-        source2 = input()
-        if "a" in source2:
-            return()
-        with open ("tests/"+ source2, encoding="utf-8") as fails:
-            n = int (fails.readline())
-            data = list(map(int, fails.readline().split()))
-    else:
-        return()
+    n, _ = map(int, input().split(' '))
+    data = list(map(int, input().split(' ')))
 
-   
-
-    # pass the input data to the function
-    result = parallel_processing(n, m, data)
-    
-    # print out the results, each pair in its own line
-    for pair in result:
-        print(pair[0], pair[1])
+    result = parallel_processing(n, data)
+    for thread, start_time in result:
+        print(thread, start_time)
 
 
 if __name__ == "__main__":
